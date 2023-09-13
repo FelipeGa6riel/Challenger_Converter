@@ -12,9 +12,13 @@ public class Main {
                                 put("De Reais a Dólares", valor -> valor / 4.98);
                                 put("De Dólares a Reais", valor -> valor / 0.20);
                                 put("De Reais a Euros", valor -> valor / 5.33);
-                                put("De Reais a Pesos Argentinos", valor -> valor / 0.0142);
-                                put("De Reais a Pesos Chilenos", valor -> valor / 0.0056);
+                                put("De Euros a Reais", valor -> valor / 0.19);
+                                put("De Reais a Peso Argentino", valor -> valor / 0.0142);
+                                put("De Peso Argentino a Reais", valor -> valor / 70.43);
+                                put("De Reais a Peso Chileno", valor -> valor / 0.0056);
+                                put("De Peso Chileno a Reais", valor -> valor / 179.57 * 100 );
                                 put("De Reais a libras", valor -> valor / 6.20);
+                                put("De Libras a Reais", valor -> valor / 0.163);
 
                         }
                 };
@@ -29,9 +33,10 @@ public class Main {
 
                 String[] converter = { "Conversor de moedas", "Conversor de temperaturas" };
                 String[] celsius = { "Celsius para Fahrenheit °F", "Fahrenheit para Celsius °C" };
-                String[] options = { "De Reais a Dólares", "De Reais a Euros", "De Reais a Pesos Argentinos",
-                                "De Reais a Pesos Chilenos",
-                                "De Reais a libras", "De Dólares a Reais" };
+                String[] options = { "De Reais a Dólares","De Dólares a Reais","De Reais a Euros","De Euros a Reais",
+                                "De Reais a Peso Argentino","De Peso Argentino a Reais",
+                                "De Reais a Peso Chileno","De Peso Chileno a Reais",
+                                "De Reais a libras","De Libras a Reais"};
 
                 boolean isContinue = true;
 
@@ -49,21 +54,25 @@ public class Main {
                                                                 JOptionPane.QUESTION_MESSAGE,
                                                                 null, options, options[0])
                                                 .toString();
-
-                                double input = Double.parseDouble(JOptionPane.showInputDialog(null,"Insira a quantia a ser convertida", "Menu",JOptionPane.DEFAULT_OPTION));
-
-                                Converter typeCoins = coins.get(choice);
-
-                                if (typeCoins != null) {
-                                        DecimalFormat df = new DecimalFormat("0.00");
-                                        Double coin = typeCoins.converter(input);
-                                        String coinCoverter = choice.substring(choice.lastIndexOf("a"));
-                                        JOptionPane.showMessageDialog(null,
-                                                        "Total: $" + df.format(coin) + " " + coinCoverter);
-
-                                } else {
-                                        JOptionPane.showMessageDialog(null, "Moeda não suportada.");
+                                try {
+                                        double input = Double.parseDouble(JOptionPane.showInputDialog(null,"Insira a quantia a ser convertida", "Menu",JOptionPane.DEFAULT_OPTION));
+                                        
+                                        Converter typeCoins = coins.get(choice);
+        
+                                        if (typeCoins != null) {
+                                                DecimalFormat df = new DecimalFormat("0.00");
+                                                Double coin = typeCoins.converter(input);
+                                                String coinCoverter = choice.substring(choice.lastIndexOf("a "));
+                                                JOptionPane.showMessageDialog(null,
+                                                                "Total: $" + df.format(coin) + " " + coinCoverter.substring(1));
+        
+                                        } else {
+                                                JOptionPane.showMessageDialog(null, "Moeda não suportada.");
+                                        }
+                                } catch (Exception e) {
+                                        JOptionPane.showMessageDialog(null, "Entrada inválida. Por favor, insira um valor numérico válido.");
                                 }
+
 
                                 // if(options.stream().anyMatch(option ->
                                 // option.equals(choice)))coins.reaisADolar();
@@ -71,15 +80,21 @@ public class Main {
 
                         if (menu.equals("Conversor de temperaturas")) {
                                 String choice = JOptionPane.showInputDialog(null, "Escolha a conversão", "menu", 1, null, celsius,celsius[0]).toString();
+                                
+                                try {
 
-                                Double input = Double.parseDouble(JOptionPane.showInputDialog(null,"Inisra a temperatura"));
+                                        Double input = Double.parseDouble(JOptionPane.showInputDialog(null,"Inisra a temperatura"));
+        
+                                        Converter typeConverter = degrees.get(choice);
+        
+                                        if(typeConverter != null) {
+                                                Double degreeConverter = typeConverter.converter(input);
+                                                String stringConverter = choice.substring(choice.lastIndexOf("para"));
+                                                JOptionPane.showMessageDialog(null, "Coversão "+stringConverter +" é igual a: "+ degreeConverter +" "+ choice.substring(choice.lastIndexOf("°"))); 
+                                        }
+                                }catch(Exception e){
+                                        JOptionPane.showMessageDialog(null, "Entrada inválida. Por favor, insira um valor numérico válido.");
 
-                                Converter typeConverter = degrees.get(choice);
-
-                                if(typeConverter != null) {
-                                        Double degreeConverter = typeConverter.converter(input);
-                                        String stringConverter = choice.substring(choice.lastIndexOf("para"));
-                                        JOptionPane.showMessageDialog(null, "Coversão "+stringConverter +" é igual a: "+ degreeConverter +" "+ choice.substring(choice.lastIndexOf("°"))); 
                                 }
                                 
                                 
